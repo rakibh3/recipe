@@ -1,16 +1,16 @@
 "use client";
 import HttpKit from "@/common/helpers/HttpKit";
 import { useQuery } from "@tanstack/react-query";
-import React, { useEffect, useState } from "react";
-import RecipeCard from "./RecipeCard";
+import { useEffect, useState } from "react";
 import Modal from "../Modal";
+import RecipeCard from "./RecipeCard";
 import SingleRecipe from "./SingleRecipe";
 
 const RecipesList = () => {
   const [openDetails, setOpenDetails] = useState(false);
   const [recipeId, setRecipeId] = useState("");
   const [recipes, setRecipes] = useState([]);
-  const [searchInput, setSearchInput] = useState("abc");
+  const [searchInput, setSearchInput] = useState("");
   const [searchQuery, setSearchQuery] = useState(null);
 
   const { data, isLoading, error } = useQuery({
@@ -24,7 +24,18 @@ const RecipesList = () => {
     }
   }, [data]);
 
-  const handleSearch = () => {
+  useEffect(() => {
+    const fetchSearchResults = async () => {
+      if (searchQuery) {
+        const results = await HttpKit.searchRecipesByName(searchQuery?.value);
+        setRecipes(results);
+      }
+    };
+    fetchSearchResults();
+  }, [searchQuery]);
+
+  const handleSearch = (e) => {
+    e.preventDefault();
     setSearchQuery(searchInput);
   };
 
@@ -42,7 +53,7 @@ const RecipesList = () => {
         <h1 className="text-2xl font-bold">Top Recipes</h1>
         {/* Search form */}
         <div>
-          <form action="" className="w-full mt-12">
+          <form onSubmit={handleSearch} className="w-full mt-12">
             <div className="relative flex p-1 rounded-full bg-white   border border-yellow-200 shadow-md md:p-2">
               <input
                 placeholder="Your favorite food"
@@ -56,8 +67,7 @@ const RecipesList = () => {
                 }
               />
               <button
-                onClick={() => handleSearch()}
-                type="button"
+                type="submit"
                 title="Start buying"
                 className="ml-auto py-3 px-6 rounded-full text-center transition bg-gradient-to-b from-yellow-200 to-yellow-300 hover:to-red-300 active:from-yellow-400 focus:from-red-400 md:px-12"
               >

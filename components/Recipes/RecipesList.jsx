@@ -40,8 +40,8 @@ const RecipesList = () => {
   };
 
   const handleDetailsOpen = (id) => {
-    setOpenDetails(true);
     setRecipeId(id);
+    setOpenDetails(true);
   };
 
   if (isLoading) return <div>Loading recipes...</div>;
@@ -91,9 +91,9 @@ const RecipesList = () => {
             <div className="grid gap-6 md:mx-auto md:w-8/12 lg:w-full lg:grid-cols-3">
               {recipes?.map((recipe) => (
                 <RecipeCard
-                  key={recipe?.id}
+                  key={recipe?.idMeal}
                   recipe={recipe}
-                  handleDetailsOpen={handleDetailsOpen}
+                  handleDetailsOpen={() => handleDetailsOpen(recipe.idMeal)}
                 />
               ))}
             </div>

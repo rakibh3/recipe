@@ -1,20 +1,22 @@
-"use client";
-import HttpKit from "@/common/helpers/HttpKit";
-import { useQuery } from "@tanstack/react-query";
-import { useEffect, useState } from "react";
-import Modal from "../Modal";
-import RecipeCard from "./RecipeCard";
-import SingleRecipe from "./SingleRecipe";
+'use client';
+import HttpKit from '@/common/helpers/HttpKit';
+import { useQuery } from '@tanstack/react-query';
+import { useEffect, useState } from 'react';
+import Modal from '../Modal';
+import RecipeCard from './RecipeCard';
+import SingleRecipe from './SingleRecipe';
+import { useCart } from '@/hooks/useCart';
 
 const RecipesList = () => {
   const [openDetails, setOpenDetails] = useState(false);
-  const [recipeId, setRecipeId] = useState("");
+  const [recipeId, setRecipeId] = useState('');
   const [recipes, setRecipes] = useState([]);
-  const [searchInput, setSearchInput] = useState("");
+  const [searchInput, setSearchInput] = useState('');
   const [searchQuery, setSearchQuery] = useState(null);
+  const { addToCart } = useCart();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["recipes"],
+    queryKey: ['recipes'],
     queryFn: HttpKit.getTopRecipes,
   });
 
@@ -94,6 +96,7 @@ const RecipesList = () => {
                   key={recipe?.idMeal}
                   recipe={recipe}
                   handleDetailsOpen={() => handleDetailsOpen(recipe.idMeal)}
+                  handleAddToCart={() => addToCart(recipe)}
                 />
               ))}
             </div>

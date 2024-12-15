@@ -1,7 +1,24 @@
+'use client';
+import useAuth from '@/hooks/useAuth';
 import Link from 'next/link';
 import React from 'react';
+import toast from 'react-hot-toast';
 
 const Navbar = () => {
+  const { user, logout } = useAuth();
+  console.log(user);
+
+  // Logout user handler
+  const handleLogout = () => {
+    logout()
+      .then(() => {
+        toast.success('Logout Successful!', { duration: 3000 });
+      })
+      .catch((error) => {
+        toast.error('Error logging out user:', error);
+      });
+  };
+
   return (
     <nav className="fixed z-50 w-full bg-white  md:absolute md:bg-transparent">
       <div className="container m-auto px-2 md:px-12 lg:px-7">
@@ -71,30 +88,47 @@ const Navbar = () => {
             </div>
 
             <div className="w-full min-w-max space-y-2 border-yellow-200 lg:space-y-0 sm:w-max lg:border-l ">
-              <button
-                type="button"
-                title="Start buying"
-                className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
-              >
-                <Link
-                  href="register"
-                  className="block text-yellow-800 font-semibold text-sm"
-                >
-                  Sign up
-                </Link>
-              </button>
-              <button
-                type="button"
-                title="Start buying"
-                className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
-              >
-                <Link
-                  href="/login"
-                  className="block text-yellow-900 font-semibold text-sm"
-                >
-                  Login
-                </Link>
-              </button>
+              {user ? (
+                <>
+                  <button
+                    onClick={handleLogout}
+                    type="button"
+                    title="Start buying"
+                    className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
+                  >
+                    <span className="block text-yellow-900 font-semibold text-sm">
+                      Logout
+                    </span>
+                  </button>
+                </>
+              ) : (
+                <>
+                  <button
+                    type="button"
+                    title="Start buying"
+                    className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
+                  >
+                    <Link
+                      href="register"
+                      className="block text-yellow-800 font-semibold text-sm"
+                    >
+                      Sign up
+                    </Link>
+                  </button>
+                  <button
+                    type="button"
+                    title="Start buying"
+                    className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
+                  >
+                    <Link
+                      href="/login"
+                      className="block text-yellow-900 font-semibold text-sm"
+                    >
+                      Login
+                    </Link>
+                  </button>
+                </>
+              )}
             </div>
           </div>
         </div>

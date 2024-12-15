@@ -1,3 +1,4 @@
+'use client';
 import app from '@/firebase/firebase.init';
 import {
   getAuth,
@@ -28,6 +29,14 @@ const AuthProvider = ({ children }) => {
     return signInWithEmailAndPassword(auth, email, password);
   };
 
+  // Update user profile
+  const updateUserProfile = (displayName) => {
+    setLoading(true);
+    return updateProfile(auth.currentUser, {
+      displayName,
+    });
+  };
+
   // Signout user
   const logout = () => {
     setLoading(true);
@@ -52,6 +61,7 @@ const AuthProvider = ({ children }) => {
     setLoading,
     createUserWithCredential,
     signInWithCredential,
+    updateUserProfile,
     logout,
   };
   return (

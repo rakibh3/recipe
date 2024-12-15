@@ -3,16 +3,32 @@
 import Link from 'next/link';
 import PasswordInput from './PasswordInput';
 import { useForm } from 'react-hook-form';
+import useAuth from '@/hooks/useAuth';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const LoginForm = () => {
+  const router = useRouter();
+  const { signInWithCredential } = useAuth();
   const {
     register,
     handleSubmit,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const { email, password } = data;
+    signInWithCredential(email, password)
+      .then((result) => {
+        if (result?.user) {
+          toast.success('Login Successful!!');
+          router.push('/');
+        }
+      })
+      .catch((error) => {
+        toast.error(error?.message);
+      });
   };
   return (
     <div className="max-w-md w-full space-y-8">

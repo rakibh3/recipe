@@ -2,17 +2,33 @@
 import { useForm } from 'react-hook-form';
 import Link from 'next/link';
 import PasswordInput from './PasswordInput';
+import useAuth from '@/hooks/useAuth';
+import toast from 'react-hot-toast';
+import { useRouter } from 'next/navigation';
 
 const RegisterForm = () => {
+  const router = useRouter();
+  const { createUserWithCredential, updateUserProfile } = useAuth();
   const {
     register,
     handleSubmit,
-    watch,
-    formState: { errors },
+    formState: { errors, isSubmitting },
+    reset,
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const { name, email, password } = data;
+
+    createUserWithCredential(email, password)
+      .then((result) => {
+        if (result?.user) {
+          toast.success('User created successful!');
+          router.push('/');
+        }
+      })
+      .catch((error) => {
+        toast.error(error?.message);
+      });
   };
 
   return (
@@ -107,7 +123,7 @@ const RegisterForm = () => {
               className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-yellow-300 hover:bg-yellow-400 active:bg-yellow-500 "
             >
               <span className="block text-yellow-900 font-semibold">
-                Register
+                {isSubmitting ? 'Loading...' : 'Register'}
               </span>
             </button>
           </div>

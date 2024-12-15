@@ -1,6 +1,7 @@
 'use client';
 
 import { useCart } from '@/hooks/useCart';
+import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FiMinus, FiPlus, FiShoppingCart, FiTrash } from 'react-icons/fi';
 
@@ -45,7 +46,9 @@ const MealCart = () => {
                       key={item.idMeal}
                       className="flex items-center gap-4 p-4 border border-gray-200 rounded-lg"
                     >
-                      <img
+                      <Image
+                        height={100}
+                        width={100}
                         src={item?.strMealThumb}
                         alt={item?.strMeal}
                         className="w-24 h-24 object-cover rounded-md"

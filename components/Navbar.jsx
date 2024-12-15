@@ -76,18 +76,24 @@ const Navbar = () => {
                 title="Start buying"
                 className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
               >
-                <span className="block text-yellow-800 font-semibold text-sm">
+                <Link
+                  href="register"
+                  className="block text-yellow-800 font-semibold text-sm"
+                >
                   Sign up
-                </span>
+                </Link>
               </button>
               <button
                 type="button"
                 title="Start buying"
                 className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
               >
-                <span className="block text-yellow-900 font-semibold text-sm">
+                <Link
+                  href="/login"
+                  className="block text-yellow-900 font-semibold text-sm"
+                >
                   Login
-                </span>
+                </Link>
               </button>
             </div>
           </div>

@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-const BASE_URL = "https://www.themealdb.com/api/json/v1/1";
+const BASE_URL = 'https://www.themealdb.com/api/json/v1/1';
 
 const HttpKit = {
   getTopRecipes: async () => {
@@ -8,7 +8,17 @@ const HttpKit = {
       const response = await axios.get(`${BASE_URL}/filter.php?a=American`);
       return response.data.meals ? response.data.meals.slice(0, 12) : [];
     } catch (error) {
-      console.error("Error fetching top recipes:", error);
+      console.error('Error fetching top recipes:', error);
+      throw error;
+    }
+  },
+
+  getAllRecipes: async () => {
+    try {
+      const response = await axios.get(`${BASE_URL}/search.php?s=`);
+      return response.data.meals || [];
+    } catch (error) {
+      console.error('Error fetching all recipes:', error);
       throw error;
     }
   },
@@ -20,7 +30,7 @@ const HttpKit = {
       });
       return response.data.meals || [];
     } catch (error) {
-      console.error("Error fetching recipes by name:", error);
+      console.error('Error fetching recipes by name:', error);
       throw error;
     }
   },
@@ -32,7 +42,7 @@ const HttpKit = {
       });
       return response.data.meals || [];
     } catch (error) {
-      console.error("Error fetching recipes by ingredient:", error);
+      console.error('Error fetching recipes by ingredient:', error);
       throw error;
     }
   },
@@ -44,7 +54,7 @@ const HttpKit = {
       });
       return response.data.meals ? response.data.meals[0] : null;
     } catch (error) {
-      console.error("Error fetching recipe details:", error);
+      console.error('Error fetching recipe details:', error);
       throw error;
     }
   },
@@ -54,7 +64,7 @@ const HttpKit = {
       const response = await axios.get(`${BASE_URL}/categories.php`);
       return response.data.categories || [];
     } catch (error) {
-      console.error("Error fetching categories:", error);
+      console.error('Error fetching categories:', error);
       throw error;
     }
   },
@@ -66,7 +76,7 @@ const HttpKit = {
       });
       return response.data.meals || [];
     } catch (error) {
-      console.error("Error filtering recipes by category:", error);
+      console.error('Error filtering recipes by category:', error);
       throw error;
     }
   },
@@ -78,7 +88,7 @@ const HttpKit = {
       });
       return response.data.meals || [];
     } catch (error) {
-      console.error("Error filtering recipes by area:", error);
+      console.error('Error filtering recipes by area:', error);
       throw error;
     }
   },

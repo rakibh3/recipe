@@ -6,7 +6,6 @@ import toast from 'react-hot-toast';
 
 const Navbar = () => {
   const { user, logout } = useAuth();
-  console.log(user);
 
   // Logout user handler
   const handleLogout = () => {
@@ -102,32 +101,32 @@ const Navbar = () => {
                   </button>
                 </>
               ) : (
-                <>
-                  <button
-                    type="button"
-                    title="Start buying"
-                    className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
+                <div className="flex">
+                  <Link
+                    href="register"
+                    className="block text-yellow-800 font-semibold text-sm"
                   >
-                    <Link
-                      href="register"
-                      className="block text-yellow-800 font-semibold text-sm"
+                    <button
+                      type="button"
+                      title="Start buying"
+                      className="w-full py-3 px-6 text-center rounded-full transition active:bg-yellow-200   focus:bg-yellow-100 sm:w-max"
                     >
                       Sign up
-                    </Link>
-                  </button>
-                  <button
-                    type="button"
-                    title="Start buying"
-                    className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
+                    </button>
+                  </Link>
+                  <Link
+                    href="/login"
+                    className="block text-yellow-900 font-semibold text-sm"
                   >
-                    <Link
-                      href="/login"
-                      className="block text-yellow-900 font-semibold text-sm"
+                    <button
+                      type="button"
+                      title="Start buying"
+                      className="w-full py-3 px-6 text-center rounded-full transition bg-yellow-300 hover:bg-yellow-100 active:bg-yellow-400 focus:bg-yellow-300 sm:w-max"
                     >
                       Login
-                    </Link>
-                  </button>
-                </>
+                    </button>
+                  </Link>
+                </div>
               )}
             </div>
           </div>

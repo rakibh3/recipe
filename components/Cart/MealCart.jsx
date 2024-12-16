@@ -1,18 +1,83 @@
 'use client';
 
+import CartApi from '@/common/helpers/CartApi';
+import useAuth from '@/hooks/useAuth';
 import { useCart } from '@/hooks/useCart';
+import { useQuery, useQueryClient } from '@tanstack/react-query';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
 import { FiMinus, FiPlus, FiShoppingCart, FiTrash } from 'react-icons/fi';
 
 const MealCart = () => {
+  const { user } = useAuth();
+  const queryClient = useQueryClient();
   const [isMounted, setIsMounted] = useState(false);
-  const { cart, updateQuantity, removeFromCart } = useCart();
-  const { items, subtotal, tax, total } = cart;
+  const { cart: localCart, updateQuantity, removeFromCart } = useCart();
+
+  const {
+    data: serverCart,
+    isLoading,
+    error,
+    refetch,
+  } = useQuery({
+    queryKey: ['carts', user?.uid],
+    queryFn: () => (user ? CartApi.getUserCart(user?.uid) : null),
+    enabled: !!user,
+  });
+
+  const cart = user ? serverCart?.cart : localCart;
+  const items = cart?.items || [];
+  const subtotal = cart?.subtotal || 0;
+  const tax = cart?.tax || 0;
+  const total = cart?.total || 0;
 
   useEffect(() => {
     setIsMounted(true);
   }, []);
+
+  const handleUpdateQuantity = (idMeal, change) => {
+    // 🟢 Update the Tanstack Query cache instantly (optimistic update)
+    queryClient.setQueryData(['carts', user?.uid], (oldData) => {
+      if (!oldData?.cart?.items) return oldData;
+
+      const updatedItems = oldData.cart.items.map((item) =>
+        item.idMeal === idMeal
+          ? { ...item, quantity: item.quantity + change }
+          : item
+      );
+
+      return {
+        ...oldData,
+        cart: {
+          ...oldData.cart,
+          items: updatedItems,
+        },
+      };
+    });
+
+    updateQuantity(idMeal, change); // 🟢 Update the local state and server
+  };
+
+  const handleRemoveFromCart = (idMeal) => {
+    // 🟢 Update the Tanstack Query cache instantly (optimistic update)
+    queryClient.setQueryData(['carts', user?.uid], (oldData) => {
+      if (!oldData?.cart?.items) return oldData;
+
+      const updatedItems = oldData.cart.items.filter(
+        (item) => item.idMeal !== idMeal
+      );
+
+      return {
+        ...oldData,
+        cart: {
+          ...oldData.cart,
+          items: updatedItems,
+        },
+      };
+    });
+
+    removeFromCart(idMeal); // 🟢 Update the local state and server
+  };
 
   if (!isMounted) return null;
 
@@ -35,9 +100,9 @@ const MealCart = () => {
                 </div>
               </div>
 
-              {cart && cart?.items?.length === 0 ? (
+              {isLoading ? (
                 <div className="text-center py-8">
-                  <p className="text-gray-500">Your cart is empty</p>
+                  <p className="text-gray-500">Loading....</p>
                 </div>
               ) : (
                 <div className="space-y-4">
@@ -63,7 +128,7 @@ const MealCart = () => {
                       </div>
                       <div className="flex items-center gap-2">
                         <button
-                          onClick={() => updateQuantity(item.idMeal, -1)}
+                          onClick={() => handleUpdateQuantity(item.idMeal, -1)}
                           className="p-1 rounded-full hover:bg-gray-100"
                         >
                           <FiMinus className="w-4 h-4 text-yellow-700" />
@@ -72,14 +137,16 @@ const MealCart = () => {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => updateQuantity(item.idMeal, 1)}
+                          onClick={() => handleUpdateQuantity(item.idMeal, 1)}
                           className="p-1 rounded-full hover:bg-gray-100"
                         >
                           <FiPlus className="w-4 h-4 text-yellow-700" />
                         </button>
                       </div>
                       <button
-                        onClick={() => removeFromCart(item?.idMeal)}
+                        onClick={() => {
+                          handleRemoveFromCart(item?.idMeal);
+                        }}
                         className="p-2 text-red-500 hover:text-red-700"
                       >
                         <FiTrash className="w-5 h-5" />

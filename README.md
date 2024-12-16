@@ -1,34 +1,64 @@
-# Recipe App
+## 📚 **Features Implemented**
 
-# Description:
+### 🚀 **New Features (Technical Terms)**
 
-- You are provided with an incomplete Recipe App project that uses the free MealDB API to retrieve recipe data. The app needs to showcase some recipes and allows users to add them to a cart. Functionalities after carting is not required for the current MVP. The home page includes a banner section, a top recipes section, and a search option to find recipes by name or ingredients.
+| **Feature**               | **Description**                                                                                      | **Technical Details**                                                              |
+| ------------------------- | ---------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| **Add Recipe to Cart**    | Users can add meals to the cart.                                                                     | Calls **POST /cart** with userId and meal details.                                 |
+| **Update Quantity**       | Users can increase or decrease the meal quantity.                                                    | Uses **PATCH /cart/:userId/:itemId** API.                                          |
+| **Remove Item from Cart** | Users can remove items from the cart.                                                                | Calls **DELETE /cart/:userId/:itemId** API.                                        |
+| **Cart Storage**          | Cart data is stored **locally** for non-logged-in users and **in the database** for logged-in users. | Uses **LocalStorage** for non-logged-in users and **MongoDB** for logged-in users. |
+| **User Authentication**   | Provides secure login and signup with Firebase.                                                      | Uses **Firebase Auth** for user authentication.                                    |
 
-# Required New Features:
+---
 
-- Basic Authentication: Implement an authentication flow using name, email, phone, and a password.
-- All Recipes Page: Create a page where users can view all recipes.
-- Add Recipe to Cart: Allow users to add recipes to a cart. The cart should store data locally if the user is not logged in, and save it to the user’s account if they are logged in.
-- Bug Fixes: There are at least three, or more features that are currently not working properly. Identify and fix these bugs.
+### 💡 **New Features (Non-Technical Terms)**
 
-# Additional Requirements:
+1. **Add to Cart**: Users can add meals to the cart. If they are logged in, their cart is stored in the database; if not, it is stored locally in their browser.
+2. **Update Quantity**: Users can increase or decrease the quantity of meals directly in the cart.
+3. **Remove from Cart**: Users can remove items from their cart at any time.
+4. **Order Summary**: Displays the total cost of the items in the cart, including taxes.
+5. **User Authentication**: Users can securely log in, sign up, and log out using **Firebase Authentication**.
 
-- Consistent Design Style: Ensure that any new features match the design style of the existing application. Follow basic accessibility standards.
-- Mobile Responsiveness: Make all pages responsive for mobile devices.
+---
 
-# Documentation Requirements:
+## 🔧 **Bug Fixes**
 
-- After completion, document under the README section.
-- Features Implemented: Describe the new features you added, in both technical and non-technical terms.
-- Bug Fixes: Briefly list the bugs you identified and fixed.
-- Time Estimate: Indicate the total time spent on the assessment.
+| **Bug**                    | **Description**                                    | **Fix**                                                              |
+| -------------------------- | -------------------------------------------------- | -------------------------------------------------------------------- |
+| **Cannot POST /cart**      | POST requests to `/cart` were not recognized.      | Created **/api/cart.js** and configured Vercel routes properly.      |
+| **CORS Issue**             | Cross-Origin Requests were blocked.                | Added **Access-Control-Allow-Origin** and preflight request handler. |
+| **Double Quantity Update** | Clicking "+" increased quantity by 2 instead of 1. | Corrected the logic in **setQueryData()**.                           |
+| **Firebase Login Failure** | Firebase login requests were not successful.       | Implemented correct Firebase Auth configuration and error handling.  |
 
-# N.B. Documentation should be brief and short, no need to go overboard with it.
+---
 
-# Submission Guidelines:
+## ⏰ **Time Estimate**
 
-- Clone or ZIP Download the existing GitHub Code repository: https://github.com/khalek-repliq/frontend-assessment
-- Get rid of the .git folder from the project.
-- Make your necessary changes and upload your new project into your personal GitHub account as a public repository
-- Host your final version on Vercel, Netlify, Firebase or similar platform and prepare your live link.
-- You must submit your "GitHub Link" & "Live Link"
+| **Task**                    | **Time Spent (Hours)** |
+| --------------------------- | ---------------------- |
+| **Setup Project**           | 1 Hours                |
+| **API Development**         | 3 Hours                |
+| **Frontend Development**    | 4 Hours                |
+| **CORS Fixes**              | 2 Hours                |
+| **Bug Fixes**               | 4 Hours                |
+| **Firebase Authentication** | 2 Hours                |
+| **Testing & Debugging**     | 2 Hours                |
+| **Documentation (README)**  | 1 Hour                 |
+
+**Total Time Spent**: **19 Hours**
+
+---
+
+## 📑 **API Endpoints**
+
+| **Method** | **Endpoint**            | **Description**                       |
+| ---------- | ----------------------- | ------------------------------------- |
+| **POST**   | `/cart`                 | Add an item to the cart.              |
+| **PATCH**  | `/cart/:userId/:itemId` | Update item quantity in cart.         |
+| **DELETE** | `/cart/:userId/:itemId` | Remove an item from the cart.         |
+| **GET**    | `/cart/:userId`         | Retrieve all cart items for the user. |
+
+---
+
+**Server-Side Github URL**: [https://github.com/rakibh3/recipe-repliq-server](https://github.com/rakibh3/recipe-repliq-server)
